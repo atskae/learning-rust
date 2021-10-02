@@ -55,6 +55,19 @@ Shows release number, commit hash and commit date.
     * Vectors are *not* mutable by default...
         * Need: `let mut fruits = Vec::new();`
 
+* HashMaps `let mut reviews: HashMap<String, String> = HashMap::new();`
+    * `my_hash_map.get()` return `Some(value)`
+
+* Loops
+    * Can return value of a loop with `break`:
+    ```
+    let my_num = loop {
+        counter += 1;
+        if counter > 10 {
+            break counter; // return counter value
+        }
+    }
+    ```
 
 ## Rust Project Structure
 Result of `cargo new ...`:
