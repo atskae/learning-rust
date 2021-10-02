@@ -25,7 +25,26 @@ Shows release number, commit hash and commit date.
 ## Language Notes
 * Variables are immutable by default. Need `mut` for mutability.
     * `let mut level = 10;`
+* Immutable: `str`, mutable: `String` (allocated on the heap!)
+    * Can't do `let name: str = "atskae"`, need to use `&str`.
 
+* Structs
+    * Classic C structs: `struct Student { name: String, level: u8 }`
+        * Doesn't need a semicolon at the end
+    * Tuple struct: `struct Animal(char, f32);`
+        * Defines the field types of the tuple to be instantiated later
+        * But this needs a semicolon at the end???
+    * Union struct: `struct Unit`
+    * To print structs with `println!()`, add `#[derive(Debug)]` before the struct definition
+
+* String funkiness
+    * When instantiating structs with string fields, need: `String::from("my string")`, convert `String` to `&str`...
+
+* Functions
+    * Can return values two ways:
+        * `return <val>;` <-- Note semicolon here
+        * `<val>` <-- Note *no* semicolon here
+        * I don't like that...
 
 ## Rust Project Structure
 Result of `cargo new ...`:
