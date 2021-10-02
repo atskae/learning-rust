@@ -1,3 +1,6 @@
+// Import arrays module
+mod my_arrays;
+
 fn test_enum() {
     // This is weird that it is allowed 
     //enum Event {
@@ -111,6 +114,8 @@ fn main() {
     println!("Got the val: {}", val);
 
     car_exercise();
+
+    my_arrays::test_my_arrays();
 }
 
 // Can be defined after main()
