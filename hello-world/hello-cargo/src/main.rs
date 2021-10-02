@@ -116,6 +116,8 @@ fn main() {
     car_exercise();
 
     my_arrays::test_my_arrays();
+
+    my_arrays::test_conditionals();
 }
 
 // Can be defined after main()
@@ -133,11 +135,18 @@ enum Transmission {
     Manual, SemiAuto, Automatic
 }
 
+#[derive(PartialEq, Debug)]
+enum Age {
+    New,
+    Used
+}
+
+#[derive(PartialEq, Debug)]
 struct Car {
     color: String,
     transmission: Transmission,
     convertible: bool,
-    mileage: u32
+    age: (Age, u32)
 }
 
 // Build a "Car" by using values from the input arguments
@@ -152,7 +161,7 @@ fn car_factory(color: String, transmission: Transmission, convertible: bool) -> 
         color: String::from(color),
         transmission: transmission,
         convertible: convertible,
-        mileage: 0
+        age: (Age::New, 0)
     };
 
     return car;
@@ -167,12 +176,12 @@ fn car_exercise() {
     
     // These names immediately reminded me of ポケスペ 笑`
     let mut car = car_factory(String::from("Red"), Transmission::Manual, false);
-    println!("Car 1 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    //println!("Car 1 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.age.1;
 
-    car = car_factory(String::from("Silver"), Transmission::Automatic, true);
-    println!("Car 2 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    //car = car_factory(String::from("Silver"), Transmission::Automatic, true);
+    //println!("Car 2 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.age.1);
 
-    car = car_factory(String::from("Yellow"), Transmission::SemiAuto, false);
-    println!("Car 3 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    //car = car_factory(String::from("Yellow"), Transmission::SemiAuto, false);
+    //println!("Car 3 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.age.1);
 
 }

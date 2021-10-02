@@ -46,6 +46,16 @@ Shows release number, commit hash and commit date.
         * `<val>` <-- Note *no* semicolon here
         * I don't like that...
 
+* Printing stuff
+    * Add `#[derive(Debug)]` before struct definitions to be able to print them
+    * `{:?}` let's us print vectors
+    * `{:#}` is this pretty print??
+
+* Arrays and Vectors
+    * Vectors are *not* mutable by default...
+        * Need: `let mut fruits = Vec::new();`
+
+
 ## Rust Project Structure
 Result of `cargo new ...`:
 ```
