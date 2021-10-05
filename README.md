@@ -25,8 +25,11 @@ Shows release number, commit hash and commit date.
 ## Language Notes
 * Variables are immutable by default. Need `mut` for mutability.
     * `let mut level = 10;`
+    * The term "variable" and "binding" are interchangeable
+        * "binding" is more appropriate in Rust since immutable by default
 * Immutable: `str`, mutable: `String` (allocated on the heap!)
     * Can't do `let name: str = "atskae"`, need to use `&str`.
+* **Only one thing can ever *own* a piece of data at a time**
 
 * Structs
     * Classic C structs: `struct Student { name: String, level: u8 }`
@@ -147,6 +150,96 @@ Shows release number, commit hash and commit date.
             println!("Wahoo!"); // semicolon here
         } 
         ```
+
+* Scope
+    * Denoted with `{ }`
+        * `if`, `else`, `match`, etc.
+    * Going out of scope = variable is "dropped"
+        * Releasing any resources tied to that variable
+            * Frees memory, closes files
+    * Reminder: The terms "binding" and "variable" are interchangable in Rust
+    * Bindings can have this associated with them, which are then freed when the bindings are "dropped"
+        * The bindings *own* those things when in scope
+        * `mascot` *owns* the `String` data associated with it
+        ```
+        {
+            let mascot = String::from("baxter");
+        }
+        ```
+        And the `String` itself owns the heap memory that holds the string's characters
+
+* Move Semantics and Ownership
+    * Transfer ownership from one binding to another
+        * **Default behavior in Rust**
+    * Use when we don't want variables to be "dropped" at end of scope
+    * Old binding becomes invalid
+    ```
+    let mascot = String::from("baxter");
+    let bearcat = mascot; // now mascot cannot be used
+    ```
+    * *Transferring ownership* == *moving*
+        * `String` value *moved* from `mascot` to `bearcat`
+    * Compile error if try to use a variable after move
+    * Passing arguments to function *moves* the variable
+    * The compiler tracks ownership
+
+* Copying instead of moving
+    * Variables must have the `Copy` trait for implicit copies to occur (instead of moving ownership)
+        * These variables can be re-used
+        * They don't have owners
+        * Good for simple values, like integers
+        * `u32` has copy trait
+    * `String` and `vectors` do not have copy trait, so are moved
+        * These can be expensive to copy
+    * If no copy trait is present, we can explicity copy: `var.clone()`
+        * Can slow down code since this duplicates memory
+
+* References allow to borrow values without owning them
+    * `&` indicates *borrow*
+    ```
+    let lotto = String::from("If I won the lotto, tomorrow, well I know");
+    let in_the_heights_reference = &lotto;
+    println!("{}", lotto); // still usable
+    some_func(in_the_heights_reference); // usable
+    ```
+
+* Borrowing vs. Full-ownership
+    * By default cannot change reference values. `&` = immutable borrow. Read-only.
+    * Must declare with `mut`: `let mut greeting = ...`
+        * Then function signature: `some_func(var: &mut String)`
+    * `&mut` = mutable borrow. Read and write allowed
+
+* Borrowing and mutable references, can only have *either or*:
+    * One or more immutable references: `&T`
+    * *Exactly one* mutable reference: `&mut T`
+* Compiler will complain if this ^ is not followed!
+
+* *Lifetimes*: Rust guarantees that all references point to valid items
+    * In C/C++, it was possible that pointer can point to already freed memory, *dangling pointer*
+    * A variable "lives longer" if its scope is longer
+* **Borrow-checker** compares variable lifetimes and checks whether a borrow was valid
+    * If a variable borrows from another variable whose lifetime is shorter, the program fails to compile
+    * Must annotate if the compiler cannot determine lifetime
+    ```
+    fn longest_word<'a>(x: &'a String, y: &'a String) -> &'a String {
+        if x.len() > y.len() {
+            x
+        } else {
+            y
+        }
+    }
+    ```
+    Annotation here is: `<'a>` and `&'a`, `a` can be anything
+    * Generic lifetime is in angle brackets `<>`
+    * Annotation above says "all parameters will live at least as long as the lifetime associated with each variable"
+    * Can also apply lifetime annotation in structs 
+    ```
+    struct S<'a> {
+        first: &'a str,
+        last: &'a str,
+    }
+    ```
+
 
 * Etsy
     * `== 0.0` seems to work
