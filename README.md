@@ -52,7 +52,9 @@ Shows release number, commit hash and commit date.
 * Printing stuff
     * Add `#[derive(Debug)]` before struct definitions to be able to print them
     * `{:?}` let's us print vectors
+        * Programmer-facing, used for debugging
     * `{:#}` is this pretty print??
+        * Using this with `String` removes the quotations from printed result `"Pika!" vs. pika!`
 
 * Arrays and Vectors
     * Vectors are *not* mutable by default...
@@ -240,6 +242,39 @@ Shows release number, commit hash and commit date.
     }
     ```
 
+* Generic types
+    * Like C++ templates (what a throwback)
+    ```
+    struct Point<T> {
+       x: T, // holds any type T
+       y: T, // must match the type of x
+    }
+
+    fn main() {
+       let boolean = Point { x: true, y: false };
+       let integer = Point { x: 1, y: 9 };
+       let float = Point { x: 1.7, y: 4.3 };
+       let string_slice = Point { x: "high", y: "low" };
+    }
+    ```
+
+* Traits: common interface that types can implement
+    * Abtract base class then?
+    * `impl Trait for Type`
+        * `Trait` is the interface, `Type` is the struct/enum
+        * `impl Area for Circle`, `impl Area for Rectangle`
+        * The `Trait` gets applied to the class `Type` after the class is defined... interesting
+    * Can implement a single function
+    ```
+    use std::fmt;
+    impl fmt::Display for Point {
+        fn fmt(&self, ...) { ... }
+    }
+    ```
+
+* Deriving traits `derive`: have traits automatically implemented
+    * Example: `#[derive(Debug, PartialEq)]`
+        * Automatically implement debug printing and equality
 
 * Etsy
     * `== 0.0` seems to work
