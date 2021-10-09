@@ -20,6 +20,16 @@ Shows release number, commit hash and commit date.
 * Build a project: `cd <project-name; cargo build`
 * Run a Cargo project: `cd <project-name>; cargo run`
     * This compiles and runs the project
+* Import from another file
+    * In `my_module.rs` define importable functions with `pub fn`:
+    ```
+    pub fn my_test_function() { ... }
+    ```
+    * Have the caller import `my_module`  at the top with `mod`:
+    ```
+    mod my_module;
+    ```
+    * Call the module's function: `my_module::my_test_function()`
 
 
 ## Language Notes
@@ -271,15 +281,47 @@ Shows release number, commit hash and commit date.
         fn fmt(&self, ...) { ... }
     }
     ```
+    * Function arguments can inidicates Traits in the function signature `&impl`:
+    ```
+    trait AsJson { ... }
+    fn send_data(value: &impl AsJson) { ... }
+    ```
+    Function accepts any parameter that use the trait `AsJson`
+
+    Another way ^ using generic types `T`:
+    ```
+    fn send_data<T: AsJson>(value: &T) { ... }
+    ```
+    * `impl<T> Container<T> { ... }`
 
 * Deriving traits `derive`: have traits automatically implemented
     * Example: `#[derive(Debug, PartialEq)]`
         * Automatically implement debug printing and equality
 
+* `Iterator` trait
+    ```
+    trait Iterator {
+        type Item; // the type of the item that the container holds
+        fn next(&mut self) -> Option<Self::Item>; // return either Some(Type) or None
+    }
+    ```
+
 * Etsy
     * `== 0.0` seems to work
         * Equality between floats was with caution in C/C++ I thought
-
+    * Define a constructor for a struct by implementing `new()`
+        ```
+        struct MyStruct { ... }
+        impl MyStruct {
+            fn new(...) -> MyStruct { 
+                return MyStruct {
+                    ...
+                };
+            }
+        }
+        ```
+    * Seems very common not to use `return` keyword in examples... :/
+        * Better get used to it I guess
 
 ## Rust Project Structure
 Result of `cargo new ...`:
