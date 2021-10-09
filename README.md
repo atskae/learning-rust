@@ -344,6 +344,64 @@ Shows release number, commit hash and commit date.
     }
     ```
 
+
+## Testing
+* Mark tests with `#[test]`
+    * Rust will only compile these when asked `cargo test`
+* Tests typically contain `assert!`, `assert_eq!` macros
+* Add `#[should_panic]` above a test that expects a panic to be raised
+* Skip tests `#[ignore = "Some reason"]`
+    * Skipped tests are still type checked and compiled
+* Tests are usually in their own submodule, mark the module with `#[cfg(test)]`
+    ```
+    #[cfg(test)]
+    mod add_function_tests {
+        #[test]
+        fn test_add_works() {
+            ...
+        }
+    
+        #[test]
+        #[should_panic]
+        fn test_add_fails() {
+            ...
+        }
+    
+        #[test]
+        #[ignore]
+        fn add_negatives() {
+            ...
+        }
+            
+    }
+    ```
+    * `cfg` = conditional compilation
+        * `cfg(predicate)`, compile if `predicate` is true
+        * `cfg(test)` means if the test flag is set when calling `cargo`, compile and run these
+
+
+### Documentation Testing
+* Doc tests are tests inside *documentation comments*
+* Triple slashes `///` in source code indicate documentation comments
+    * Format is Markdown
+* Only work for library projects, so need to start a project with `cargo new --lib my_lib`
+
+
+### Integration Tests
+Test how others use the code, if modules work together
+* Exist in a separate directory and file to externally test the library code
+    * Put in `my_lib/tests/` directory
+    ```
+    my_lib/
+        src/
+        tests/
+    ```
+* Only library crates can be integration tested
+    * Binary crates don't expose functions that others can use
+        * To test binary crates, include `src/lib.rs` with most functinality in `src/main.rs`?
+        * Then can import the library
+
+
 ## Rust Project
 
 ### Vocab
@@ -367,8 +425,10 @@ rust-project/
     bin/ <--- contains executables, "Crates" // not generated from `cargo new`
 ```
 To get `lib.rs` file (instead of a `main.rs` file): `cargo new --lib my-library`
-    * Compilation result: `libmy_library.rlib`
-        * This can be published and linked to other project
+* Compilation result: `libmy_library.rlib`
+    * This can be published and linked to other project
+* The module name is automatically taken from the library name passed in (`my_library`, for example)
+    * Access: `my_library::my_function`
 
 ## Tutorials 
 * https://docs.microsoft.com/en-us/learn/paths/rust-first-steps/
