@@ -15,11 +15,12 @@ Shows release number, commit hash and commit date.
 
 ## Development Notes
 * Compile: `rustc <file>.rs`
-* Create a project
+* Create a project (a new package)
     * Go to project directory, then run: `cargo new <project name>`
 * Build a project: `cd <project-name; cargo build`
 * Run a Cargo project: `cd <project-name>; cargo run`
     * This compiles and runs the project
+    * `Cargo.toml` contains instructions on how to build the crate
 * Import from another file
     * In `my_module.rs` define importable functions with `pub fn`:
     ```
@@ -30,7 +31,12 @@ Shows release number, commit hash and commit date.
     mod my_module;
     ```
     * Call the module's function: `my_module::my_test_function()`
-
+* Central Rust package (Crates) registrty: https://crates.io/
+    * Put dependencies in `Cargo.toml`. `cargo build` will pull Crates from the registry
+    ```
+    [dependencies]
+    regex = "1.4.2"
+    ```
 
 ## Language Notes
 * Variables are immutable by default. Need `mut` for mutability.
@@ -322,16 +328,47 @@ Shows release number, commit hash and commit date.
         ```
     * Seems very common not to use `return` keyword in examples... :/
         * Better get used to it I guess
+    * Struct fields defined in a module (`mod my_module { ... }`) are private and cannot be accessed
+        * Need to write *public* getter and setter methods
+        * Don't need `mod my_module { ... }` if the module contents are in a separate file?
+    * Inner modules are private by default, use `pub mod` to expose them
+    ```
+    mod my_module { // public
+        mod my_sub_module_one { // inner sub module, private
 
-## Rust Project Structure
-Result of `cargo new ...`:
+        }
+
+        pub mod my_sub_module_two { // inner sub module, public
+            // my_module::my_sub_module_two
+        }
+    }
+    ```
+
+## Rust Project
+
+### Vocab
+* *Package* a collection of one or more crates, contains information on how to build the crates
+* *Crate* smallest unit of code that can be compiled
+    * Compile result is a binary (executalbe) or a library
+    * Has a module name
+* *Module* code inside a Crate
+* *Item privacy*: either public (can be used outside of the module) or private (internal-module use only; internal implementation details)
+    * Controlled by modules
+
+### Project Structure
+Get basic structure with `cargo new ...`.
 ```
 rust-project/
     Cargo.toml <-- contains metadata and dependencies
     src/
         main.rs <--- function main() is the entry point
+        lib.rs <--- library file // not generated from `cargo new`
         ...
+    bin/ <--- contains executables, "Crates" // not generated from `cargo new`
 ```
+To get `lib.rs` file (instead of a `main.rs` file): `cargo new --lib my-library`
+    * Compilation result: `libmy_library.rlib`
+        * This can be published and linked to other project
 
 ## Tutorials 
 * https://docs.microsoft.com/en-us/learn/paths/rust-first-steps/
