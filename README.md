@@ -37,6 +37,12 @@ Shows release number, commit hash and commit date.
     [dependencies]
     regex = "1.4.2"
     ```
+    * Check if a package is available `cargo search <package name>`
+
+## Common Crates
+* `serde` serialization and deserialization of data
+    * `serde_json`
+
 
 ## Language Notes
 * Variables are immutable by default. Need `mut` for mutability.
@@ -64,6 +70,9 @@ Shows release number, commit hash and commit date.
         * `return <val>;` <-- Note semicolon here
         * `<val>` <-- Note *no* semicolon here
         * I don't like that...
+
+* Syntactic sugar for catching errors: `some_func()?;`
+
 
 * Printing stuff
     * Add `#[derive(Debug)]` before struct definitions to be able to print them
