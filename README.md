@@ -72,7 +72,20 @@ Shows release number, commit hash and commit date.
         * I don't like that...
 
 * Syntactic sugar for catching errors: `some_func()?;`
-
+Equivalent snippets:
+```
+fn function_1() -> Result(Success, Failure) {
+    match operation_that_might_fail() {
+        Ok(success) => success,
+        Err(failure) => return Err(failure),
+    }
+}
+```
+```
+fn function_2() -> Result(Success, Failure) {
+    operation_that_might_fail()?
+}
+```
 
 * Printing stuff
     * Add `#[derive(Debug)]` before struct definitions to be able to print them
