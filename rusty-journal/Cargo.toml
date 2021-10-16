@@ -8,6 +8,8 @@ edition = "2018"
 [dependencies]
 structopt = "0.3"
 serde_json = "1.0"
+home = "0.5" # get home directory across different OSs
+anyhow = "1.0" # pretty-print errors
 
 [dependencies.serde]
 version = "1.0"

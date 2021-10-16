@@ -395,6 +395,17 @@ fn function_2() -> Result(Success, Failure) {
     serde_json::to_writer(file, &tasks);
     ```
 
+* Convert an `Option<T>` to an `Option<U>` with `.map()`. Ignores if item is ``Option::None`
+```
+// Converts an Option<String> into an Option<usize>
+let maybe_some_string = Some(String::from("Hello, World!"));
+// `Option::map` takes self *by value*, consuming `maybe_some_string`
+let maybe_some_len = maybe_some_string.map(|s| s.len());
+```
+
+* Anonymous functions (lambdas? in Python)
+`let a = |x, y| { ... } `
+
 ## Testing
 * Mark tests with `#[test]`
     * Rust will only compile these when asked `cargo test`

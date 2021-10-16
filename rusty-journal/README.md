@@ -14,4 +14,6 @@ rusty-journal/src
 ## Crates
 * `structopt` parse command line arguments
 * `chrono` timestamps, dates
-  
+* `anyhow` pretty-print errors
+    * Catches errors from `?;` and pretty-prints them
+    * `anyhow!` macro

@@ -133,9 +133,9 @@ pub fn add_task(journal_path: PathBuf, task: Task) -> Result<()> {
 }
 
 pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> {
-    if !Path::new(&journal_path).exists() {
-        return Ok(());
-    }
+    //if !Path::new(&journal_path).exists() {
+    //    return Ok(());
+    //}
 
     let mut file = OpenOptions::new()
         .read(true)
@@ -157,9 +157,9 @@ pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> 
 }
 
 pub fn list_task(journal_path: PathBuf) -> Result<()> {
-    if !Path::new(&journal_path).exists() {
-        return Ok(());
-    }
+    //if !Path::new(&journal_path).exists() {
+    //    return Ok(());
+    //}
 
     let mut file = OpenOptions::new()
         .read(true)
