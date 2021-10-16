@@ -366,6 +366,25 @@ fn function_2() -> Result(Success, Failure) {
     }
     ```
 
+* Reading files
+    * Can apply multiple modes at once with `std::fs::OpenOptions`
+    ```
+    let mut file = OpenOptions::new(
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(file_path)?;
+    )
+    ```
+    * Read in a JSON file (deserialize):
+    ```
+    match serde_json::from_reader(&file)
+    ```
+    * Write JSON to file (serialize):
+    ```
+    let mut tasks = ... // do stuff
+    serde_json::to_writer(file, &tasks);
+    ```
 
 ## Testing
 * Mark tests with `#[test]`
