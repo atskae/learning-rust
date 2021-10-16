@@ -10,7 +10,7 @@ use std::path::{Path, PathBuf};
 use std::fs::{File, OpenOptions};
 use std::io::Read;
 use std::io::Write;
-
+use std::fmt;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Task {
@@ -30,6 +30,16 @@ impl Task {
     }
 }
 
+// Custom print console 
+impl fmt::Display for Task {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // Converts UTC to local time
+        let created_at = self.created_at.with_timezone(&Local).format("%F %H:%M");
+        // Write task and timestamp, x-space padding align
+        write!(f, "{:<20} Created at: {}", self.text, created_at)
+    }
+}
+
 // My horrible attempt 笑 without looking at the solution 
 fn old_add_task(journal_path: PathBuf, task: Task) -> Result<()> {
     println!("Adding task [{}] to {:?}", task.text, journal_path);
@@ -38,7 +48,6 @@ fn old_add_task(journal_path: PathBuf, task: Task) -> Result<()> {
     let mut tasks: Vec::<Task>;
     if !Path::new(&journal_path).exists() {
         println!("Creating a new file.");
-        let mut file = File::create(&journal_path)?;
         tasks = Vec::<Task>::new();
     } else {
         let mut file = match File::open(&journal_path) {
@@ -148,5 +157,26 @@ pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> 
 }
 
 pub fn list_task(journal_path: PathBuf) -> Result<()> {
+    if !Path::new(&journal_path).exists() {
+        return Ok(());
+    }
+
+    let mut file = OpenOptions::new()
+        .read(true)
+        .open(journal_path)?;
+    let mut tasks = get_tasks(&file)?;
+    if tasks.len() == 0 {
+        return Ok(());
+    }
+
+    let mut num = 1;
+    for task in tasks.iter() {
+        //println!("{}: {} (created at {})", num, task.text, task.created_at);
+        
+        // Since we implemented the Display trait for Task, we can simply print it
+        println!("{}: {}", num, task);  
+        num += 1;
+    }
+
     Ok(())
 }

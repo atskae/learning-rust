@@ -27,8 +27,8 @@ fn main() {
             println!("Removing the task at: {}", new_position);
             tasks::complete_task(journal_file, new_position);
         }
-        _ => {
-            println!("Not implemented yet!");
+        Action::List => {
+            tasks::list_task(journal_file);
         }
     };
 }

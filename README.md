@@ -61,6 +61,15 @@ Shows release number, commit hash and commit date.
         * But this needs a semicolon at the end???
     * Union struct: `struct Unit`
     * To print structs with `println!()`, add `#[derive(Debug)]` before the struct definition
+    * To customize print for scructs, implement the `Display` trait:
+    ```
+        impl std::fmt::Display for MyStruct {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                let created_at = self.created_at.with_timezone(&Local).format("%F %H:%M");
+                write!(f, "{:<50} [{}]", self.text, created_at)
+            }
+        }
+    ```
 
 * String funkiness
     * When instantiating structs with string fields, need: `String::from("my string")`, convert `String` to `&str`...

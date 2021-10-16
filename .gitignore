@@ -14,4 +14,5 @@ Cargo.lock
 *.pdb
 
 hello-world/main
+rusty-journal/*.json
 
