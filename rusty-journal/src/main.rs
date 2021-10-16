@@ -18,17 +18,8 @@ fn main() {
     };
 
     match opt.action {
-        Action::Add {task: new_task} => {
-            println!("Adding the task: {}", new_task);
-            let task = Task::new(new_task);
-            tasks::add_task(journal_file, task);
-        }
-        Action::Done {position: new_position } => {
-            println!("Removing the task at: {}", new_position);
-            tasks::complete_task(journal_file, new_position);
-        }
-        Action::List => {
-            tasks::list_task(journal_file);
-        }
-    };
+        Action::Add {task: new_task} => tasks::add_task(journal_file, Task::new(new_task)),
+        Action::Done {position: new_position } => tasks::complete_task(journal_file, new_position),
+        Action::List => tasks::list_task(journal_file),
+    }.expect("Failed to perform action.");
 }

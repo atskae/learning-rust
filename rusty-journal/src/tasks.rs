@@ -143,12 +143,12 @@ pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> 
         .open(journal_path)?;
     let mut tasks = get_tasks(&file)?;
     
-    if task_position >= tasks.len() {
+    if task_position >= tasks.len() || task_position == 0 {
         return Ok(());
     }
 
     println!("Removing at position: {}", task_position);
-    tasks.remove(task_position);
+    tasks.remove(task_position-1);
     println!("Contents of tasks: {:?}", tasks);
 
     serde_json::to_writer(file, &tasks);
