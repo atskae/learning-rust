@@ -91,6 +91,20 @@ fn old_add_task(journal_path: PathBuf, task: Task) -> Result<()> {
     Ok(())
 }
 
+fn get_tasks(mut file: &File) -> Result<Vec<Task>> {
+    // Read file and deserialize into Vec<Task>
+    let mut tasks: Vec<Task> = match serde_json::from_reader(file) {
+        Ok(tasks) => tasks,
+        Err(e) if e.is_eof() => Vec::new(), // if empty file
+        Err(e) => Err(e)?,
+    };
+    // Rewind file to beginning
+    file.set_len(0); // Remove old contents...
+    file.seek(SeekFrom::Start(0))?;
+
+    Ok(tasks)
+}
+
 /// Adds the task to the JSON file of tasks
 // The solution...
 pub fn add_task(journal_path: PathBuf, task: Task) -> Result<()> {
@@ -101,27 +115,35 @@ pub fn add_task(journal_path: PathBuf, task: Task) -> Result<()> {
         .write(true)
         .create(true)
         .open(journal_path)?;
-    
-    // Read file and deserialize into Vec<Task>
-    let mut tasks: Vec<Task> = match serde_json::from_reader(&file) {
-        Ok(tasks) => tasks,
-        Err(e) if e.is_eof() => Vec::new(),
-        Err(e) => Err(e)?,
-    };
 
-    // Rewind file to beginning
-    file.seek(SeekFrom::Start(0))?;
-
-    // Add task and update file
+    let mut tasks: Vec<Task> = get_tasks(&file)?;
     tasks.push(task);
-    // not sure why the file object is not a reference here
-    // (but it's a reference in from_reader)
     serde_json::to_writer(file, &tasks);
-
-    return Ok(());
+    
+    Ok(())
 }
 
 pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> {
+    if !Path::new(&journal_path).exists() {
+        return Ok(());
+    }
+
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(journal_path)?;
+    let mut tasks = get_tasks(&file)?;
+    
+    if task_position >= tasks.len() {
+        return Ok(());
+    }
+
+    println!("Removing at position: {}", task_position);
+    tasks.remove(task_position);
+    println!("Contents of tasks: {:?}", tasks);
+
+    serde_json::to_writer(file, &tasks);
+
     Ok(())
 }
 

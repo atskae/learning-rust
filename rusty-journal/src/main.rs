@@ -23,6 +23,10 @@ fn main() {
             let task = Task::new(new_task);
             tasks::add_task(journal_file, task);
         }
+        Action::Done {position: new_position } => {
+            println!("Removing the task at: {}", new_position);
+            tasks::complete_task(journal_file, new_position);
+        }
         _ => {
             println!("Not implemented yet!");
         }
